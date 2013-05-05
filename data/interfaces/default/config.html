@@ -14,8 +14,6 @@
 </%def>
 <%def name="body()">
 
-
-
 	<div id="paddingheader">
 		<h1 class="clearfix"><img src="interfaces/default/images/icon_gear.png" alt="settings"/>Settings</h1>
 	</div>
@@ -25,9 +23,8 @@
 		<ul>
 			<li><a href="#tabs-1">Web Interface</a></li>
 			<li><a href="#tabs-2">Download settings</a></li>
-			<li><a href="#tabs-3">Search providers</a></li>
-			<li><a href="#tabs-4">Quality &amp; Post Processing</a></li>
-			<li><a href="#tabs-5">Advanced Settings</a></li>
+			<li><a href="#tabs-3">Quality &amp; Post Processing</a></li>
+			<li><a href="#tabs-4">Advanced Settings</a></li>
 		</ul>
 		<div id="tabs-1">
 		
@@ -76,11 +73,6 @@
                     
                     <fieldset>
                     	<legend>Interval</legend>
-	                   	<div class="row">
-	                    	<label>NZB Search Interval</label>
-	                    	<input type="text" name="nzb_search_interval" value="${config['nzb_search_interval']}" size="4">mins
-	                    </div>
-	            
 	                	<div class="row">
 	                    	<label>Download Scan Interval</label>
 	                    	<input type="text" name="download_scan_interval" value="${config['download_scan_interval']}" size="4">mins
@@ -89,7 +81,7 @@
 	                   	 	<label>Library Scan Interval</label>
 	                    	<input type="text" name="libraryscan_interval" value="${config['libraryscan_interval']}" size="4">mins
 	                    </div>
-	                </fieldset>
+	            </fieldset>
                 </td>
             </tr>
 	    <tr>
@@ -105,32 +97,8 @@
         <table class="configtable" summary="Download Settings">
 	    <tr>
                 <td>
-                	<fieldset>
-                		<legend>SABnzbd</legend>
-	                	<div class="row">
-		                    <label>SABnzbd Host:</label>
-		                    <input type="text" name="sab_host" value="${config['sab_host']}" size="30">
-		                    <small>usually http://localhost:8080</small>
-	                    </div>
-	                   	<div class="row">
-		                    <label>SABnzbd Username</label>
-		                    <input type="text" name="sab_username" value="${config['sab_user']}" size="20">
-	                    </div>
-				<div class="row">
-		                    <label>SABnzbd Password:</label>
-		                    <input type="password" name="sab_password" value="${config['sab_pass']}" size="20">
-	                    </div>               
-	                	<div class="row">
-		                    <label>SABnzbd API:</label>
-		                    <input type="text" name="sab_apikey" value="${config['sab_api']}" size="36">
-	                    </div>
-	                    <div class="row">
-	                        <label>SABnzbd Category:</label>
-	                        <input type="text" name="sab_category" value="${config['sab_cat']}" size="20">
-	                    </div>
-                    </fieldset>
                     <fieldset>
-                    		<legend>Downloads</legend>
+                    	<legend>Downloads</legend>
                        	<div class="row">
                             <label>Music Download Directory:</label>
                             <input type="text" name="download_dir" value="${config['download_dir']}" size="50">
@@ -138,206 +106,12 @@
                         </div>
                     </fieldset>                    
                 </td>
-           
-                <td>
-                   	<fieldset>
-                   		<legend>Torrents</legend>
-                   		<div class="row">               
-                   		    <label>Black Hole Directory</label>
-                   		    <input type="text" name="torrentblackhole_dir" value="${config['torrentblackhole_dir']}" size="50">
-                   		    <small>Folder your Download program watches for Torrents</small>
-                   		</div>
-                   		<div class="row">
-                   		    <label>Minimum seeders:</label>
-                   		    <input type="text" name="numberofseeders" value="${config['numberofseeders']}" size="5">
-                   		    <small>Number of minimum seeders a torrent must have to be accepted</small>
-                   		</div>
-                   		<div class="row">
-                   		<label>Music Download Directory</label>
-                   		<input type="text" name="download_torrent_dir" value="${config['download_torrent_dir']}" size="50">
-                   		<small>Full path where your torrent client downloads your music e.g. /Users/name/Downloads/music</small>
-                   		</div>        
-				<div class="row checkbox">
-				<label>Keep Files for Seeding</label>
-				<input type="checkbox" name="keep_torrent_files" value="1" ${config['keep_torrent_files']}>		
-				</div>
-			</fieldset>
-                   	<fieldset>
-                   		<legend>Usenet</legend>
-                   	    <div class="row checkbox">                    	 
-                   	    	<input id="useblackhole" type="checkbox" name="blackhole" value=1 ${config['use_blackhole']} /><label>Use Black Hole</label>
-                   	    </div>
-                   	    <div class="config">
-	                   	    <div class="row">
-	                   	        <label>Black Hole Directory</label>
-	                   	        <input type="text" name="blackhole_dir" value="${config['blackhole_dir']}" size="50">
-	                   	        <small>Folder your Download program watches for NZBs</small>
-	                   	    </div>
-                   	    </div>
-                   	    <div class="checkbox row">                    	
-                   	    	<input type="text" name="usenet_retention" value="${config['usenet_retention']}" size="5"><label>Usenet Retention</label>
-                   	    </div>
-                   	 </fieldset>
-                </td>
             </tr>            
     
 	    </table>
 	    <input type="button" class="configsubmit" value="Save Changes" onclick="doAjaxCall('configUpdate',$(this),'tabs',true);return false;" data-success="Changes saved successfully">
 	</div>
 	<div id="tabs-3">
-        <table class="configtable" summary="Search Providers">
-	    <tr>
-                <td>
-		    <legend>NZBs</legend>
-                	<fieldset>
-                		<legend>Newznab</legend>
-                		<div class="row checkbox">                    	
-                			<input  id="usenewznab" type="checkbox" name="newznab" onclick="initConfigCheckbox($(this));" value="1" ${config['use_newznab']} /><label>Use Newznab</label>
-                		</div>
-				<div id="newznab_providers">
-				    <div class="config" id="newznab1">
-					<div class="row">
-					    <label>Newznab Host</label>
-					    <input type="text" name="newznab_host" value="${config['newznab_host']}" size="30">
-					    <small>e.g. http://nzb.su</small>
-					</div>
-					<div class="row">
-					    <label>Newznab API</label>
-					    <input type="text" name="newznab_apikey" value="${config['newznab_api']}" size="36">
-					</div>
-					<div class="row checkbox">
-					    <input id="newznab_enabled" type="checkbox" name="newznab_enabled" onclick="initConfigCheckbox($(this));" value="1" ${config['newznab_enabled']} /><label>Enabled</label>
-					</div>
-				    </div>
-				    <%
-					newznab_number = 2
-				    %>
-				    %for newznab in config['extra_newznabs']:
-					<%
-					    if newznab[2] == '1' or newznab[2] == 1:
-						newznab_enabled = "checked"
-					    else:
-						newznab_enabled = ""
-					%>
-					<div class="config" id="newznab${newznab_number}">
-					    <div class="row">
-						<label>Newznab Host</label>
-						<input type="text" name="newznab_host${newznab_number}" value="${newznab[0]}" size="30">
-					    </div>
-					    <div class="row">
-						<label>Newznab API</label>
-						<input type="text" name="newznab_api${newznab_number}" value="${newznab[1]}" size="36">
-					    </div>
-					    <div class="row checkbox">
-						<input id="newznab_enabled" type="checkbox" name="newznab_enabled${newznab_number}" value="1" ${newznab_enabled} /><label>Enabled</label>
-					    </div>
-					    <div class="row">
-						<input type="button" class="remove" id="newznab${newznab_number}" value="Remove ${newznab[0]}">
-					    </div>
-					</div>
-					<%
-					    newznab_number += 1
-					%>
-				    %endfor
-				    <input type="button" value="Add Newznab" class="add_newznab" id="add_newznab" />
-				</div>
-                	</fieldset>
-
-                	<fieldset>
-                		<legend>NZBs.org</legend>
-                		<div class="row checkbox">                    	
-                			<input id="usenzbsorg" type="checkbox" name="nzbsorg" onclick="initConfigCheckbox($(this));" value="1" ${config['use_nzbsorg']} /><label>Use NZBs.org</label>
-                		</div>
-                		<div class="config">
-                			<div class="row">
-                			<label>NZBs.org API Key</label>
-                			  <input type="text" name="nzbsorg_hash" value="${config['nzbsorg_hash']}" size="30">
-                			</div>
-                		</div>
-                	</fieldset>
-                	<fieldset>
-                		<legend>NZBsRus</legend>
-                		<div class="row checkbox">                    	
-                			<input id="usenzbsrus" type="checkbox" name="nzbsrus" onclick="initConfigCheckbox($(this));" value="1" ${config['use_nzbsrus']} /><label>Use NZBsRus</label> 
-                		</div>
-                		<div class="config">
-                			<div class="row">
-                			<label>NZBsRus UID</label>
-                			 <input type="text" name="nzbsrus_uid" value="${config['nzbsrus_uid']}" size="10">
-                			</div>
-                			<div class="row">
-                			<label>NZBsRus API Key</label>
-                			  <input type="text" name="nzbsrus_apikey" value="${config['nzbsrus_apikey']}" size="10">
-                			</div>
-                		</div>
-                	</fieldset>
-                	<fieldset>
-                		<legend>nzbX</legend>
-                		<div class="row checkbox">                    	
-                			<input id="usenzbx" type="checkbox" name="nzbx" onclick="initConfigCheckbox($(this));" value="1" ${config['use_nzbx']} /><label>Use nzbX</label> 
-                		</div>
-                	</fieldset>
-                </td>
-        
-                <td>
-                    <fieldset>
-                    	<legend>Torrents</legend>
-                    	<div class="row checkbox">                    	
-                    		<input type="checkbox" name="use_isohunt" value="1" ${config['use_isohunt']} /><label>Isohunt</label> 
-                    	</div>
-                    	<div class="row checkbox">                    	 
-                    		<input type="checkbox" name="use_mininova" value="1" ${config['use_mininova']} /><label>Mininova</label>
-                    	</div>
-                    	<div class="row checkbox">
-                    	<input type="checkbox" name="use_kat" value="1" ${config['use_kat']} /><label>Kick Ass Torrents</label></div>
-                        <div class="row checkbox">
-                            <input id="usewaffles" type="checkbox" name="waffles" onclick="initConfigCheckbox($(this));" value="1" ${config['use_waffles']} /><label>Waffles.fm</label>
-                        </div>
-                        <div class="config">
-                            <div class="row">
-                                <label>Waffles UID Number: </label>
-                                <input type="text" name="waffles_uid" value="${config['waffles_uid']}" size="36">
-                            </div>
-                            <div class="row">
-                                <label>Waffles Passkey: </label>
-                                <input type="text" name="waffles_passkey" value="${config['waffles_passkey']}" size="36">
-                            </div>
-                        </div>
-                        <div class="row checkbox">
-                            <input id="userutracker" type="checkbox" name="rutracker" onclick="initConfigCheckbox($(this));" value="1" ${config['use_rutracker']} /><label>rutracker.org</label>
-                        </div>
-                        <div class="config">
-                            <div class="row">
-                                <label>rutracker User Name: </label>
-                                <input type="text" name="rutracker_user" value="${config['rutracker_user']}" size="36">
-                            </div>
-                            <div class="row">
-                                <label>rutracker Password: </label>
-                                <input type="password" name="rutracker_password" value="${config['rutracker_password']}" size="36">
-			    </div>
-			</div>
-                        <div class="row checkbox">    
-			    <input id="usewhatcd" type="checkbox" name="whatcd" onclick="initConfigCheckbox($(this));" value="1" ${config['use_whatcd']} /><label>What.cd</label>
-                        </div>
-                        <div class="config">
-                            <div class="row">
-                                <label>What.cd Username: </label>
-                                <input type="text" name="whatcd_username" value="${config['whatcd_username']}" size="36">
-                            </div>
-                            <div class="row">
-                                <label>What.cd Password: </label>
-                                <input type="password" name="whatcd_password" value="${config['whatcd_password']}" size="36">
-                            </div>
-                        </div>
-                    </fieldset>
-                    
-                </td>
-
-            </tr>
-        </table>
-	<input type="button" class="configsubmit" value="Save Changes" onclick="doAjaxCall('configUpdate',$(this),'tabs',true);return false;" data-success="Changes saved successfully">
-	</div>
-	<div id="tabs-4">
         <table class="configtable" summary="Quality & Post Processing">
             <tr>
                 <td>
@@ -416,7 +190,7 @@
 		</table>
 		<input type="button" class="configsubmit" value="Save Changes" onclick="doAjaxCall('configUpdate',$(this),'tabs',true);return false;" data-success="Changes saved successfully">
 	</div>
-	<div id="tabs-5">
+	<div id="tabs-4">
         <table class="configtable" summary="Advanced Settings">
             <tr>
                 <td>
@@ -758,46 +532,6 @@
 					</fieldset>
 					
                       
-                 	<fieldset>
-                 		<legend>Musicbrainz</legend>
-                 		<div class="row">
-                 			<label>Muscbrainz Mirror</label>
-                 		<select name="mirror" id="mirror">
-                 		%for mirror in config['mirror_list']:
-                 			<%
-                 				if mirror == headphones.MIRROR:
-                 					selected = 'selected="selected"'
-                 				else:
-                 					selected = ''
-                 			%>
-                 			<option value="${mirror}" ${selected}>${mirror}</option>
-                 		%endfor
-                 		</select>
-                 		</div>
-                 		<div id="customoptions">
-                 			<div class="row">
-                 				<label>Host</label><input type="text" name="customhost" value="${config['customhost']}" size="20">
-                 			</div>
-                 			<div class="row">
-                 				<label>Port</label><input type="text" name="customport" value="${config['customport']}" size="8">
-                 			</div>
-                 			<div class="row">
-                 				<label>Sleep Interval</label><input type="text" name="customsleep" value="${config['customsleep']}" size="4">
-                 			</div>
-                 		</div>
-                 		
-                 		<div id="hpserveroptions">
-                 			<div class="row">
-                 				<label>Username:</label><input type="text" name="hpuser" value="${config['hpuser']}" size="20">
-                 			</div>
-                 			<div class="row">
-                 				<label>Password:</label><input type="password" name="hppass" value="${config['hppass']}" size="15"><br>
-                 				<a href="http://headphones.codeshy.com/vip" id="vipserver">Get an Account!</a>
-                 			</div>
-                 		</div>
-                 	</fieldset>
-                 	
-				</td>
 			</tr>
         </table>
 	<input type="button" class="configsubmit" value="Save Changes" onclick="doAjaxCall('configUpdate',$(this),'tabs',true);return false;" data-success="Changes saved successfully">

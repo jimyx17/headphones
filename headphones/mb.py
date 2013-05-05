@@ -117,6 +117,7 @@ def findArtist(name, limit=1):
                         'url':              unicode("http://musicbrainz.org/artist/" + result['id']),#probably needs to be changed
                         'score':            int(result['ext:score'])
                         })
+        print artistlist
         return artistlist
         
 def findRelease(name, limit=1):
