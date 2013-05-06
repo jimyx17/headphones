@@ -112,6 +112,7 @@ table.display thead th {
 
 table.display thead th.link a {
     display: block;
+    cursor: url('images/hand_cursor.cur');
 }
 
 table.display tfoot th {
