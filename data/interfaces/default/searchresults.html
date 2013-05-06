@@ -6,14 +6,17 @@
       <h1 class="clearfix"><img src="interfaces/default/images/icon_search.png" alt="Search results"/>Search Result</h1>
    </div>
    <table class="display" id="searchresults_table">
-      <thead>
-         <tr>
+       <thead>
+           <tr>
+               <th colspan="3" class="link"><a onclick="changeDisplayBody('artists')">Artistas</a></th>
+            </tr>
+         <tr id="artists">
             <th id="artistname">Artist Name</th>
             <th id="score">Score</th>
             <th id="add"></th>
          </tr>
       </thead>
-      <tbody>
+      <tbody id="artists">
          %if searchresults:
             %for result in searchresults['Artists']:
             <%
@@ -31,6 +34,62 @@
             %endfor
          %endif
       </tbody>
+      <thead>
+          <tr>
+              <th colspan="3" class="link"><a onclick="changeDisplayBody('albums')">Albums</a></th>
+          </tr>
+          <tr id="albums">
+              <th id="albumname">Album Name</th>
+              <th id="score">Score</th>
+              <th id="add"></th>
+           </tr>
+      </thead>
+      <tbody id="albums">
+        %if searchresults:
+            %for result in searchresults['Albums']:
+            <%
+                result['score'] = result['PopularityIndex']/1000
+                if result['score'] == 100:
+                    grade = 'A'
+                else:
+                    grade = 'Z'
+            %>
+            <tr class="grade${grade}">
+                <td id="albumname"><a title="${result['AlbumName']}">${result['AlbumName']}<a></td>
+                <td id="score"><div class="bar"><div class="score" style="width: ${result['score']}px">${result['score']}</div></div></td>
+                <td id="add"><a href="addArtist?artistid=${result['ArtistID']}"><span class="ui-icon ui-icon-plus"></span> Add this artist</a></td>
+            </tr>
+            %endfor
+        %endif
+      </tbody>
+      <thead>
+          <tr>
+              <th colspan="3" class="link"><a onclick="changeDisplayBody('songs')">Songs</a></th>
+          </tr>
+          <tr id="songs">
+              <th id="songname">Song Name</th>
+              <th id="score">Score</th>
+              <th id="add"></th>
+           </tr>
+      </thead>
+      <tbody id="songs">
+        %if searchresults:
+            %for result in searchresults['Songs']:
+            <%
+                result['score'] = result['PopularityIndex']/1000
+                if result['score'] == 100:
+                    grade = 'A'
+                else:
+                    grade = 'Z'
+            %>
+            <tr class="grade${grade}">
+                <td id="songname"><a title="${result['SongName']}">${result['SongName']}<a></td>
+                <td id="score"><div class="bar"><div class="score" style="width: ${result['score']}px">${result['score']}</div></div></td>
+                <td id="add"><a href="addArtist?artistid=${result['ArtistID']}"><span class="ui-icon ui-icon-plus"></span> Add this artist</a></td>
+            </tr>
+            %endfor
+        %endif
+      </tbody>
    </table>
    </div>
 </%def>
@@ -44,6 +103,12 @@
    <script src="js/libs/jquery.dataTables.min.js"></script>
    
    <script>
+   function changeDisplayBody(eID)
+   {
+           $('tbody#' + eID).toggle(400, "swing");
+           $('tr#' + eID).toggle(400, "swing");
+               return false;
+   }
    function getArt() {
       $("table#searchresults_table tr td#albumart img").each(function(){   
          var id = $(this).attr('title');
