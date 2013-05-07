@@ -2,6 +2,7 @@
 # Compiled source #
 ###################
 *.pyc
+*.pyo
 *.py~
 *.pyproj
 *.sln
