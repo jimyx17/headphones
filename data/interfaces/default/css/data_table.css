@@ -110,9 +110,18 @@ table.display thead th {
 	font-size: 16px;
 }
 
-table.display thead th.link a {
+table.display thead tr th a.link{
     display: block;
-    cursor: url('images/hand_cursor.cur');
+    cursor: pointer;
+    width: 100%;
+}
+
+table.display thead tr{
+    width: 100%;
+}
+
+table.display tbody{
+    display: block;
 }
 
 table.display tfoot th {

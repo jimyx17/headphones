@@ -102,8 +102,30 @@ def search(query, groove_client=None, limit=10):
     try:
         jresp = json.loads(resp[1])
         jresp = jresp['result']['result']
+        for key in jresp:
+            jresp[key] = jresp[key][:limit]
     except Exception, e:
         jresp = {"result": "ERROR", "reason": "%s" % str(e)}
+    return jresp
+
+@grooveComClient
+def getInfoById(eid, etype, groove_client=None):
+    http = httplib2.Http()
+    headers = basicHeaders
+    session, initToken, uuid = groove_client
+    payload,headers = generateBasicPayload(http, headers, session, uuid=uuid)
+    token = createToken('getPageInfoByIDType', initToken, revTokens['htmlshark'])
+    payload['method'] = 'getPageInfoByIDType'
+    payload['header']['token'] = token
+    payload['header']['client'] = 'htmlshark'
+    payload['parameters'] =  {"id":eid, "type":etype}
+    resp = http.request('http://grooveshark.com/more.php?getPageInfoByIDType', method  ='POST', body=json.dumps(payload), headers=headers)
+    try:
+        jresp = json.loads(resp[1])
+        jresp = jresp['result']
+    except Exception, e:
+        jresp = {"result": "ERROR", "reason": "%s" % str(e)}
+
     return jresp
 
 @grooveComClient

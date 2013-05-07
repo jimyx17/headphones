@@ -8,7 +8,7 @@
    <table class="display" id="searchresults_table">
        <thead>
            <tr>
-               <th colspan="3" class="link"><a onclick="changeDisplayBody('artists')">Artistas</a></th>
+               <th colspan="3" ><a class="link" id="artists">Artistas</a></th>
             </tr>
          <tr id="artists">
             <th id="artistname">Artist Name</th>
@@ -36,7 +36,7 @@
       </tbody>
       <thead>
           <tr>
-              <th colspan="3" class="link"><a onclick="changeDisplayBody('albums')">Albums</a></th>
+              <th colspan="3"><a class="link">Albums</a></th>
           </tr>
           <tr id="albums">
               <th id="albumname">Album Name</th>
@@ -64,7 +64,7 @@
       </tbody>
       <thead>
           <tr>
-              <th colspan="3" class="link"><a onclick="changeDisplayBody('songs')">Songs</a></th>
+              <th colspan="3"><a class="link">Songs</a></th>
           </tr>
           <tr id="songs">
               <th id="songname">Song Name</th>
@@ -103,10 +103,13 @@
    <script src="js/libs/jquery.dataTables.min.js"></script>
    
    <script>
+   $("a.link").click(function(){
+       $("tbody#" + this.id).slideToggle(1000);
+   })
    function changeDisplayBody(eID)
    {
-           $('tbody#' + eID).toggle(400, "swing");
-           $('tr#' + eID).toggle(400, "swing");
+           $('tbody#' + eID).fadeToggle(400);
+           $('tr#' + eID).fadeToggle(400, "swing");
                return false;
    }
    function getArt() {
