@@ -1,22 +1,20 @@
 <%inherit file="base.html" />
 
 <%def name="body()">
-   <div class="table_wrapper">
    <div id="paddingheader">
       <h1 class="clearfix"><img src="interfaces/default/images/icon_search.png" alt="Search results"/>Search Result</h1>
    </div>
-   <table class="display" id="searchresults_table">
-       <thead>
-           <tr>
-               <th colspan="3" ><a class="link" id="artists">Artistas</a></th>
-            </tr>
-         <tr id="artists">
-            <th id="artistname">Artist Name</th>
-            <th id="score">Score</th>
-            <th id="add"></th>
-         </tr>
-      </thead>
-      <tbody id="artists">
+       <div class="header ui-corner-all">
+           <div class="link" id="artists">
+               <h2>Artistas</h2>
+            </div>
+         <div class="loader" id="artists">
+            <div class="colname" id="artistname">Artist Name</div>
+            <div class="colname" id="score">Score</div>
+            <div class="colname" id="add">Add</div>
+         </div>
+      </div>
+      <div class="loader" id="artists">
          %if searchresults:
             %for result in searchresults['Artists']:
             <%
@@ -26,25 +24,25 @@
                else:
                   grade = 'Z'
             %>
-            <tr class="grade${grade}">
-               <td id="artistname"><a title="${result['ArtistName']}">${result['ArtistName']}</a></td>
-               <td id="score"><div class="bar"><div class="score" style="width: ${result['score']}px">${result['score']}</div></div></td>
-               <td id="add"><a href="addArtist?artistid=${result['ArtistID']}"><span class="ui-icon ui-icon-plus"></span> Add this artist</a></td>
-            </tr>
+            <div class="grade${grade}">
+               <div class="field" id="artistname"><a title="${result['ArtistName']}">${result['ArtistName']}</a></div>
+               <div class="field" id="score"><div class="bar"><div class="score" style="width: ${result['score']}px">${result['score']}</div></div></div>
+               <div class="field" id="add"><a href="addArtist?artistid=${result['ArtistID']}"><span class="ui-icon ui-icon-plus"></span> Add this artist</a></div>
+            </div>
             %endfor
          %endif
-      </tbody>
-      <thead>
-          <tr>
-              <th colspan="3"><a class="link">Albums</a></th>
-          </tr>
-          <tr id="albums">
-              <th id="albumname">Album Name</th>
-              <th id="score">Score</th>
-              <th id="add"></th>
-           </tr>
-      </thead>
-      <tbody id="albums">
+      </div>
+      <div class="header ui-corner-all">
+          <div class="link" id="albums">
+              <h2>Albums</h2>
+          </div>
+          <div class="loader" id="albums">
+              <div class="colname" id="albumname">Album Name</div>
+              <div class="colname" id="score">Score</div>
+              <div class="colname" id="add"></div>
+           </div>
+      </div>
+      <div class="loader" id="albums">
         %if searchresults:
             %for result in searchresults['Albums']:
             <%
@@ -54,25 +52,25 @@
                 else:
                     grade = 'Z'
             %>
-            <tr class="grade${grade}">
-                <td id="albumname"><a title="${result['AlbumName']}">${result['AlbumName']}<a></td>
-                <td id="score"><div class="bar"><div class="score" style="width: ${result['score']}px">${result['score']}</div></div></td>
-                <td id="add"><a href="addArtist?artistid=${result['ArtistID']}"><span class="ui-icon ui-icon-plus"></span> Add this artist</a></td>
-            </tr>
+            <div class="grade${grade}">
+                <div class="field" id="albumname"><a title="${result['AlbumName']}">${result['AlbumName']}<a></div>
+                <div class="field" id="score"><div class="bar"><div class="score" style="width: ${result['score']}px">${result['score']}</div></div></div>
+                <div class="field" id="add"><a href="addArtist?artistid=${result['ArtistID']}"><span class="ui-icon ui-icon-plus"></span> Add this artist</a></div>
+            </div>
             %endfor
         %endif
-      </tbody>
-      <thead>
-          <tr>
-              <th colspan="3"><a class="link">Songs</a></th>
-          </tr>
-          <tr id="songs">
-              <th id="songname">Song Name</th>
-              <th id="score">Score</th>
-              <th id="add"></th>
-           </tr>
-      </thead>
-      <tbody id="songs">
+      </div>
+      <div class="header ui-corner-all">
+          <div class="link" id="songs">
+              <h2>Songs</h2>
+          </div>
+          <div class="loader" id="songs">
+              <div class="colname" id="songname">Song Name</div>
+              <div class="colname" id="score">Score</div>
+              <div class="colname" id="add"></div>
+           </div>
+      </div>
+      <div class="loader" id="songs">
         %if searchresults:
             %for result in searchresults['Songs']:
             <%
@@ -82,16 +80,14 @@
                 else:
                     grade = 'Z'
             %>
-            <tr class="grade${grade}">
-                <td id="songname"><a title="${result['SongName']}">${result['SongName']}<a></td>
-                <td id="score"><div class="bar"><div class="score" style="width: ${result['score']}px">${result['score']}</div></div></td>
-                <td id="add"><a href="addArtist?artistid=${result['ArtistID']}"><span class="ui-icon ui-icon-plus"></span> Add this artist</a></td>
-            </tr>
+            <div class="grade${grade}">
+                <div class="field" id="songname"><a title="${result['SongName']}">${result['SongName']}<a></div>
+                <div class="field" id="score"><div class="bar"><div class="score" style="width: ${result['score']}px">${result['score']}</div></div></div>
+                <div class="field" id="add"><a href="addArtist?artistid=${result['ArtistID']}"><span class="ui-icon ui-icon-plus"></span> Add this artist</a></div>
+            </div>
             %endfor
         %endif
-      </tbody>
-   </table>
-   </div>
+      </div>
 </%def>
 
 <%def name="headIncludes()">
@@ -103,8 +99,8 @@
    <script src="js/libs/jquery.dataTables.min.js"></script>
    
    <script>
-   $("a.link").click(function(){
-       $("tbody#" + this.id).slideToggle(1000);
+   $("div.link").click(function(){
+       $(".loader#" + this.id).slideToggle( 500);
    })
    function changeDisplayBody(eID)
    {

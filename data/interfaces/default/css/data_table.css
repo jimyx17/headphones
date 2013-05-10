@@ -1,3 +1,45 @@
+div.header{
+    background-image: -webkit-linear-gradient(#fafafa, #eaeaea) !important;
+    background-image: linear-gradient(rgb(250, 250, 250), rgb(234, 234, 234)) !important;
+    border: 1px solid rgb(202, 202, 202);
+    display: block;
+    overflow: hidden;
+}
+
+div.header .loader{
+    height: 26px;
+}
+
+div.link { 
+    border-bottom: 1px solid rgb(202, 202, 202);
+    cursor: pointer;
+    height: 26px;
+}
+
+div.colname { 
+    float: left;
+    text-align: center;
+    width: 33%;
+}
+
+div.field {
+    float: left;
+    width: 33%;
+}
+
+div.link h2{ 
+    border-bottom: 1px solid rgb(202, 202, 202);
+    text-align: center;
+}
+
+div.header .link :hover{
+    text-decoration: none;
+    background-image: -webkit-linear-gradient(#fcfcfc, #ececec) !important;
+    background-image: linear-gradient(rgb(252, 252, 252), rgb(236, 236, 236)) !important;
+}
+
+/* Finish my customization */
+
 .dataTables_wrapper {
 	width: 100%;
 	min-height: 125px;
@@ -120,9 +162,6 @@ table.display thead tr{
     width: 100%;
 }
 
-table.display tbody{
-    display: block;
-}
 
 table.display tfoot th {
 	padding: 3px 18px 3px 10px;
