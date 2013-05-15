@@ -1,99 +1,53 @@
 <%inherit file="base.html" />
 
 <%def name="body()">
+   <div class="table_wrapper">
    <div id="paddingheader">
       <h1 class="clearfix"><img src="interfaces/default/images/icon_search.png" alt="Search results"/>Search Result</h1>
    </div>
-   <div class="table">
-       <div class="header ui-corner-all">
-           <div class="link" id="artists">
-               <h2>Artistas</h2>
-            </div>
-         <div class="loader" id="artists">
-            <div class="colname" id="artistname">Artist Name</div>
-            <div class="colname" id="score">Score</div>
-            <div class="colname" id="add">Add</div>
-         </div>
-      </div>
-      <div class="loader" id="artists">
+   <table class="display" id="searchresults_table">
+      <thead>
+         <tr>
+            <th id="albumart"></th>
+            %if type == 'album':
+               <th id="albumname">Album Name</th>
+            %endif
+            <th id="artistname">Artist Name</th>
+            <th id="score">Score</th>
+            <th id="add"></th>
+         </tr>
+      </thead>
+      <tbody>
          %if searchresults:
-            %for result in searchresults['Artists']:
+            %for result in searchresults:
             <%
-               result['score'] = result['PopularityIndex']/1000
                if result['score'] == 100:
                   grade = 'A'
                else:
                   grade = 'Z'
             %>
-            <div class="grade${grade}">
-               <div class="field" id="artistname"><a title="${result['ArtistName']}">${result['ArtistName']}</a></div>
-               <div class="field" id="score"><div class="bar"><div class="score" style="width: ${result['score']}px">${result['score']}</div></div></div>
-               <div class="field" id="add"><a href="addArtist?artistid=${result['ArtistID']}"><span class="ui-icon ui-icon-plus"></span> Add this artist</a></div>
-            </div>
+            <tr class="grade${grade}">
+            %if type == 'album':
+               <td id="albumart"><div id="artistImg"><img title="${result['albumid']}" class="albumArt" height="50" width="50"></div></td>
+            %else:
+               <td id="albumart"><div id="artistImg"><img title="${result['id']}" class="albumArt" height="50" width="50"></div></td>
+            %endif
+            %if type == 'album':
+               <td id="albumname"><a href="${result['albumurl']}">${result['title']}</a></td>
+            %endif
+               <td id="artistname"><a href="${result['url']}" title="${result['uniquename']}">${result['uniquename']}</a></td>
+               <td id="score"><div class="bar"><div class="score" style="width: ${result['score']}px">${result['score']}</div></div></td>
+            %if type == 'album': 
+               <td id="add"><a href="addReleaseById?rid=${result['albumid']}"><span class="ui-icon ui-icon-plus"></span> Add this album</a></td>
+            %else:
+               <td id="add"><a href="addArtist?artistid=${result['id']}"><span class="ui-icon ui-icon-plus"></span> Add this artist</a></td>
+            %endif
+            </tr>
             %endfor
          %endif
-      </div>
-      </div>
-      <div class="table">
-      <div class="header ui-corner-all">
-          <div class="link" id="albums">
-              <h2>Albums</h2>
-          </div>
-          <div class="loader" id="albums">
-              <div class="colname" id="albumname">Album Name</div>
-              <div class="colname" id="score">Score</div>
-              <div class="colname" id="add"></div>
-           </div>
-      </div>
-      <div class="loader" id="albums">
-        %if searchresults:
-            %for result in searchresults['Albums']:
-            <%
-                result['score'] = result['PopularityIndex']/1000
-                if result['score'] == 100:
-                    grade = 'A'
-                else:
-                    grade = 'Z'
-            %>
-            <div class="grade${grade}">
-                <div class="field" id="albumname"><a title="${result['AlbumName']}">${result['AlbumName']}<a></div>
-                <div class="field" id="score"><div class="bar"><div class="score" style="width: ${result['score']}px">${result['score']}</div></div></div>
-                <div class="field" id="add"><a href="addArtist?artistid=${result['ArtistID']}"><span class="ui-icon ui-icon-plus"></span> Add this artist</a></div>
-            </div>
-            %endfor
-        %endif
-      </div>
-      </div>
-      <div class="table">
-      <div class="header ui-corner-all">
-          <div class="link" id="songs">
-              <h2>Songs</h2>
-          </div>
-          <div class="loader" id="songs">
-              <div class="colname" id="songname">Song Name</div>
-              <div class="colname" id="score">Score</div>
-              <div class="colname" id="add"></div>
-           </div>
-      </div>
-      <div class="loader" id="songs">
-        %if searchresults:
-            %for result in searchresults['Songs']:
-            <%
-                result['score'] = result['PopularityIndex']/1000
-                if result['score'] == 100:
-                    grade = 'A'
-                else:
-                    grade = 'Z'
-            %>
-            <div class="grade${grade}">
-                <div class="field" id="songname"><a title="${result['SongName']}">${result['SongName']}<a></div>
-                <div class="field" id="score"><div class="bar"><div class="score" style="width: ${result['score']}px">${result['score']}</div></div></div>
-                <div class="field" id="add"><a href="addArtist?artistid=${result['ArtistID']}"><span class="ui-icon ui-icon-plus"></span> Add this artist</a></div>
-            </div>
-            %endfor
-        %endif
-      </div>
-      </div>
+      </tbody>
+   </table>
+   </div>
 </%def>
 
 <%def name="headIncludes()">
@@ -105,15 +59,6 @@
    <script src="js/libs/jquery.dataTables.min.js"></script>
    
    <script>
-   $("div.link").click(function(){
-       $(".loader#" + this.id).slideToggle( 500);
-   })
-   function changeDisplayBody(eID)
-   {
-           $('tbody#' + eID).fadeToggle(400);
-           $('tr#' + eID).fadeToggle(400, "swing");
-               return false;
-   }
    function getArt() {
       $("table#searchresults_table tr td#albumart img").each(function(){   
          var id = $(this).attr('title');
@@ -153,3 +98,404 @@
    });
    </script>
 </%def>
+<%inherit file="base.html" />
+
+<%def name="body()">
+   <div class="table_wrapper">
+   <div id="paddingheader">
+      <h1 class="clearfix"><img src="interfaces/default/images/icon_search.png" alt="Search results"/>Search Result</h1>
+   </div>
+   <table class="display" id="searchresults_table">
+      <thead>
+         <tr>
+            <th id="albumart"></th>
+            %if type == 'album':
+               <th id="albumname">Album Name</th>
+            %endif
+            <th id="artistname">Artist Name</th>
+            <th id="score">Score</th>
+            <th id="add"></th>
+         </tr>
+      </thead>
+      <tbody>
+         %if searchresults:
+            %for result in searchresults:
+            <%
+               if result['score'] == 100:
+                  grade = 'A'
+               else:
+                  grade = 'Z'
+            %>
+            <tr class="grade${grade}">
+            %if type == 'album':
+               <td id="albumart"><div id="artistImg"><img title="${result['albumid']}" class="albumArt" height="50" width="50"></div></td>
+            %else:
+               <td id="albumart"><div id="artistImg"><img title="${result['id']}" class="albumArt" height="50" width="50"></div></td>
+            %endif
+            %if type == 'album':
+               <td id="albumname"><a href="${result['albumurl']}">${result['title']}</a></td>
+            %endif
+               <td id="artistname"><a href="${result['url']}" title="${result['uniquename']}">${result['uniquename']}</a></td>
+               <td id="score"><div class="bar"><div class="score" style="width: ${result['score']}px">${result['score']}</div></div></td>
+            %if type == 'album': 
+               <td id="add"><a href="addReleaseById?rid=${result['albumid']}"><span class="ui-icon ui-icon-plus"></span> Add this album</a></td>
+            %else:
+               <td id="add"><a href="addArtist?artistid=${result['id']}"><span class="ui-icon ui-icon-plus"></span> Add this artist</a></td>
+            %endif
+            </tr>
+            %endfor
+         %endif
+      </tbody>
+   </table>
+   </div>
+</%def>
+
+<%def name="headIncludes()">
+   <link rel="stylesheet" href="interfaces/default/css/data_table.css">
+</%def>
+
+<%def name="javascriptIncludes()">
+
+   <script src="js/libs/jquery.dataTables.min.js"></script>
+   
+   <script>
+   function getArt() {
+      $("table#searchresults_table tr td#albumart img").each(function(){   
+         var id = $(this).attr('title');
+         var image = $(this);
+         if ( !image.hasClass('done') ) {
+            image.addClass('done');
+            getImageLinks(image,id,"${type}");
+         }
+      });
+   }
+   function initThisPage() {
+      getArt();
+      $('#searchresults_table').dataTable(
+         {
+            "bDestroy": true,
+            "aoColumnDefs": [
+                   { 'bSortable': false, 'aTargets': [ 0,3 ] }
+            ], 
+            "oLanguage": {
+               "sLengthMenu":"Show _MENU_ results per page",
+               "sEmptyTable": "No results",
+               "sInfo":"Showing _START_ to _END_ of _TOTAL_ results",
+               "sInfoEmpty":"Showing 0 to 0 of 0 results",
+               "sInfoFiltered":"(filtered from _MAX_ total results)",
+               "sSearch" : ""},
+            "iDisplayLength": 25,
+            "sPaginationType": "full_numbers",
+            "aaSorting": []
+         });
+         resetFilters("album");
+   }
+   $(document).ready(function(){
+         initThisPage();      
+   });
+   $(window).load(function(){
+      initFancybox();
+   });
+   </script>
+</%def>
+<%inherit file="base.html" />
+
+<%def name="body()">
+   <div class="table_wrapper">
+   <div id="paddingheader">
+      <h1 class="clearfix"><img src="interfaces/default/images/icon_search.png" alt="Search results"/>Search Result</h1>
+   </div>
+   <table class="display" id="searchresults_table">
+      <thead>
+         <tr>
+            <th id="albumart"></th>
+            %if type == 'album':
+               <th id="albumname">Album Name</th>
+            %endif
+            <th id="artistname">Artist Name</th>
+            <th id="score">Score</th>
+            <th id="add"></th>
+         </tr>
+      </thead>
+      <tbody>
+         %if searchresults:
+            %for result in searchresults:
+            <%
+               if result['score'] == 100:
+                  grade = 'A'
+               else:
+                  grade = 'Z'
+            %>
+            <tr class="grade${grade}">
+            %if type == 'album':
+               <td id="albumart"><div id="artistImg"><img title="${result['albumid']}" class="albumArt" height="50" width="50"></div></td>
+            %else:
+               <td id="albumart"><div id="artistImg"><img title="${result['id']}" class="albumArt" height="50" width="50"></div></td>
+            %endif
+            %if type == 'album':
+               <td id="albumname"><a href="${result['albumurl']}">${result['title']}</a></td>
+            %endif
+               <td id="artistname"><a href="${result['url']}" title="${result['uniquename']}">${result['uniquename']}</a></td>
+               <td id="score"><div class="bar"><div class="score" style="width: ${result['score']}px">${result['score']}</div></div></td>
+            %if type == 'album': 
+               <td id="add"><a href="addReleaseById?rid=${result['albumid']}"><span class="ui-icon ui-icon-plus"></span> Add this album</a></td>
+            %else:
+               <td id="add"><a href="addArtist?artistid=${result['id']}"><span class="ui-icon ui-icon-plus"></span> Add this artist</a></td>
+            %endif
+            </tr>
+            %endfor
+         %endif
+      </tbody>
+   </table>
+   </div>
+</%def>
+
+<%def name="headIncludes()">
+   <link rel="stylesheet" href="interfaces/default/css/data_table.css">
+</%def>
+
+<%def name="javascriptIncludes()">
+
+   <script src="js/libs/jquery.dataTables.min.js"></script>
+   
+   <script>
+   function getArt() {
+      $("table#searchresults_table tr td#albumart img").each(function(){   
+         var id = $(this).attr('title');
+         var image = $(this);
+         if ( !image.hasClass('done') ) {
+            image.addClass('done');
+            getImageLinks(image,id,"${type}");
+         }
+      });
+   }
+   function initThisPage() {
+      getArt();
+      $('#searchresults_table').dataTable(
+         {
+            "bDestroy": true,
+            "aoColumnDefs": [
+                   { 'bSortable': false, 'aTargets': [ 0,3 ] }
+            ], 
+            "oLanguage": {
+               "sLengthMenu":"Show _MENU_ results per page",
+               "sEmptyTable": "No results",
+               "sInfo":"Showing _START_ to _END_ of _TOTAL_ results",
+               "sInfoEmpty":"Showing 0 to 0 of 0 results",
+               "sInfoFiltered":"(filtered from _MAX_ total results)",
+               "sSearch" : ""},
+            "iDisplayLength": 25,
+            "sPaginationType": "full_numbers",
+            "aaSorting": []
+         });
+         resetFilters("album");
+   }
+   $(document).ready(function(){
+         initThisPage();      
+   });
+   $(window).load(function(){
+      initFancybox();
+   });
+   </script>
+</%def>
+<%inherit file="base.html" />
+
+<%def name="body()">
+   <div class="table_wrapper">
+   <div id="paddingheader">
+      <h1 class="clearfix"><img src="interfaces/default/images/icon_search.png" alt="Search results"/>Search Result</h1>
+   </div>
+   <table class="display" id="searchresults_table">
+      <thead>
+         <tr>
+            <th id="albumart"></th>
+            %if type == 'album':
+               <th id="albumname">Album Name</th>
+            %endif
+            <th id="artistname">Artist Name</th>
+            <th id="score">Score</th>
+            <th id="add"></th>
+         </tr>
+      </thead>
+      <tbody>
+         %if searchresults:
+            %for result in searchresults:
+            <%
+               if result['score'] == 100:
+                  grade = 'A'
+               else:
+                  grade = 'Z'
+            %>
+            <tr class="grade${grade}">
+            %if type == 'album':
+               <td id="albumart"><div id="artistImg"><img title="${result['albumid']}" class="albumArt" height="50" width="50"></div></td>
+            %else:
+               <td id="albumart"><div id="artistImg"><img title="${result['id']}" class="albumArt" height="50" width="50"></div></td>
+            %endif
+            %if type == 'album':
+               <td id="albumname"><a href="${result['albumurl']}">${result['title']}</a></td>
+            %endif
+               <td id="artistname"><a href="${result['url']}" title="${result['uniquename']}">${result['uniquename']}</a></td>
+               <td id="score"><div class="bar"><div class="score" style="width: ${result['score']}px">${result['score']}</div></div></td>
+            %if type == 'album': 
+               <td id="add"><a href="addReleaseById?rid=${result['albumid']}"><span class="ui-icon ui-icon-plus"></span> Add this album</a></td>
+            %else:
+               <td id="add"><a href="addArtist?artistid=${result['id']}"><span class="ui-icon ui-icon-plus"></span> Add this artist</a></td>
+            %endif
+            </tr>
+            %endfor
+         %endif
+      </tbody>
+   </table>
+   </div>
+</%def>
+
+<%def name="headIncludes()">
+   <link rel="stylesheet" href="interfaces/default/css/data_table.css">
+</%def>
+
+<%def name="javascriptIncludes()">
+
+   <script src="js/libs/jquery.dataTables.min.js"></script>
+   
+   <script>
+   function getArt() {
+      $("table#searchresults_table tr td#albumart img").each(function(){   
+         var id = $(this).attr('title');
+         var image = $(this);
+         if ( !image.hasClass('done') ) {
+            image.addClass('done');
+            getImageLinks(image,id,"${type}");
+         }
+      });
+   }
+   function initThisPage() {
+      getArt();
+      $('#searchresults_table').dataTable(
+         {
+            "bDestroy": true,
+            "aoColumnDefs": [
+                   { 'bSortable': false, 'aTargets': [ 0,3 ] }
+            ], 
+            "oLanguage": {
+               "sLengthMenu":"Show _MENU_ results per page",
+               "sEmptyTable": "No results",
+               "sInfo":"Showing _START_ to _END_ of _TOTAL_ results",
+               "sInfoEmpty":"Showing 0 to 0 of 0 results",
+               "sInfoFiltered":"(filtered from _MAX_ total results)",
+               "sSearch" : ""},
+            "iDisplayLength": 25,
+            "sPaginationType": "full_numbers",
+            "aaSorting": []
+         });
+         resetFilters("album");
+   }
+   $(document).ready(function(){
+         initThisPage();      
+   });
+   $(window).load(function(){
+      initFancybox();
+   });
+   </script>
+</%def>
+<%inherit file="base.html" />
+
+<%def name="body()">
+   <div class="table_wrapper">
+   <div id="paddingheader">
+      <h1 class="clearfix"><img src="interfaces/default/images/icon_search.png" alt="Search results"/>Search Result</h1>
+   </div>
+   <table class="display" id="searchresults_table">
+      <thead>
+         <tr>
+            <th id="albumart"></th>
+            %if type == 'album':
+               <th id="albumname">Album Name</th>
+            %endif
+            <th id="artistname">Artist Name</th>
+            <th id="score">Score</th>
+            <th id="add"></th>
+         </tr>
+      </thead>
+      <tbody>
+         %if searchresults:
+            %for result in searchresults:
+            <%
+               if result['score'] == 100:
+                  grade = 'A'
+               else:
+                  grade = 'Z'
+            %>
+            <tr class="grade${grade}">
+            %if type == 'album':
+               <td id="albumart"><div id="artistImg"><img title="${result['albumid']}" class="albumArt" height="50" width="50"></div></td>
+            %else:
+               <td id="albumart"><div id="artistImg"><img title="${result['id']}" class="albumArt" height="50" width="50"></div></td>
+            %endif
+            %if type == 'album':
+               <td id="albumname"><a href="${result['albumurl']}">${result['title']}</a></td>
+            %endif
+               <td id="artistname"><a href="${result['url']}" title="${result['uniquename']}">${result['uniquename']}</a></td>
+               <td id="score"><div class="bar"><div class="score" style="width: ${result['score']}px">${result['score']}</div></div></td>
+            %if type == 'album': 
+               <td id="add"><a href="addReleaseById?rid=${result['albumid']}"><span class="ui-icon ui-icon-plus"></span> Add this album</a></td>
+            %else:
+               <td id="add"><a href="addArtist?artistid=${result['id']}"><span class="ui-icon ui-icon-plus"></span> Add this artist</a></td>
+            %endif
+            </tr>
+            %endfor
+         %endif
+      </tbody>
+   </table>
+   </div>
+</%def>
+
+<%def name="headIncludes()">
+   <link rel="stylesheet" href="interfaces/default/css/data_table.css">
+</%def>
+
+<%def name="javascriptIncludes()">
+
+   <script src="js/libs/jquery.dataTables.min.js"></script>
+   
+   <script>
+   function getArt() {
+      $("table#searchresults_table tr td#albumart img").each(function(){   
+         var id = $(this).attr('title');
+         var image = $(this);
+         if ( !image.hasClass('done') ) {
+            image.addClass('done');
+            getImageLinks(image,id,"${type}");
+         }
+      });
+   }
+   function initThisPage() {
+      getArt();
+      $('#searchresults_table').dataTable(
+         {
+            "bDestroy": true,
+            "aoColumnDefs": [
+                   { 'bSortable': false, 'aTargets': [ 0,3 ] }
+            ], 
+            "oLanguage": {
+               "sLengthMenu":"Show _MENU_ results per page",
+               "sEmptyTable": "No results",
+               "sInfo":"Showing _START_ to _END_ of _TOTAL_ results",
+               "sInfoEmpty":"Showing 0 to 0 of 0 results",
+               "sInfoFiltered":"(filtered from _MAX_ total results)",
+               "sSearch" : ""},
+            "iDisplayLength": 25,
+            "sPaginationType": "full_numbers",
+            "aaSorting": []
+         });
+         resetFilters("album");
+   }
+   $(document).ready(function(){
+         initThisPage();      
+   });
+   $(window).load(function(){
+      initFancybox();
+   });
+   </script>
+</%def>
+

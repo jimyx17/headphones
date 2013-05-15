@@ -110,10 +110,13 @@ class WebInterface(object):
     albumPage.exposed = True
 
 
-    def search(self, name):
+    def search(self, name, type):
         if len(name) == 0:
             raise cherrypy.HTTPRedirect("home")
-        searchresults = gs.search(name)
+        if type == 'artist':
+            searchresults = mb.findArtist(name, limit=100)
+        else:
+            searchresults = mb.findRelease(name, limit=100)
         return serve_template(templatename="searchresults.html", title='Search Results for: "' + name + '"', searchresults=searchresults, type=type)
     search.exposed = True
 
