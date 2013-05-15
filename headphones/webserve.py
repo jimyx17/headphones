@@ -563,6 +563,7 @@ class WebInterface(object):
                     "api_enabled" : checked(headphones.API_ENABLED),
                     "api_key" : headphones.API_KEY,
                     "download_scan_interval" : headphones.DOWNLOAD_SCAN_INTERVAL,
+                    "nzb_search_interval" : headphones.SEARCH_INTERVAL,
                     "libraryscan_interval" : headphones.LIBRARYSCAN_INTERVAL,
                     "sab_host" : headphones.SAB_HOST,
                     "sab_user" : headphones.SAB_USERNAME,
@@ -573,9 +574,24 @@ class WebInterface(object):
                     "use_blackhole" : checked(headphones.BLACKHOLE),
                     "blackhole_dir" : headphones.BLACKHOLE_DIR,
                     "usenet_retention" : headphones.USENET_RETENTION,
+#                    "use_nzbmatrix" : checked(headphones.NZBMATRIX),
+#                    "nzbmatrix_user" : headphones.NZBMATRIX_USERNAME,
+#                    "nzbmatrix_api" : headphones.NZBMATRIX_APIKEY,
+                    "use_newznab" : checked(headphones.NEWZNAB),
                     "newznab_host" : headphones.NEWZNAB_HOST,
                     "newznab_api" : headphones.NEWZNAB_APIKEY,
                     "newznab_enabled" : checked(headphones.NEWZNAB_ENABLED),
+                    "extra_newznabs" : headphones.EXTRA_NEWZNABS,
+                    "use_nzbsorg" : checked(headphones.NZBSORG),
+                    "nzbsorg_uid" : headphones.NZBSORG_UID,
+                    "nzbsorg_hash" : headphones.NZBSORG_HASH,
+#                    "use_newzbin" : checked(headphones.NEWZBIN),
+#                    "newzbin_uid" : headphones.NEWZBIN_UID,
+#                    "newzbin_pass" : headphones.NEWZBIN_PASSWORD,
+                    "use_nzbsrus" : checked(headphones.NZBSRUS),
+                    "nzbsrus_uid" : headphones.NZBSRUS_UID,
+                    "nzbsrus_apikey" : headphones.NZBSRUS_APIKEY,
+                    "use_nzbx" : checked(headphones.NZBX),
                     "preferred_words" : headphones.PREFERRED_WORDS,
                     "ignored_words" : headphones.IGNORED_WORDS,
                     "required_words" : headphones.REQUIRED_WORDS,
@@ -662,6 +678,7 @@ class WebInterface(object):
                     "hppass": headphones.HPPASS,
                     "cache_sizemb":headphones.CACHE_SIZEMB,
                 }
+
 
         # Need to convert EXTRAS to a dictionary we can pass to the config: it'll come in as a string like 2,5,6,8
         extras_list = ["single", "ep", "compilation", "soundtrack", "live", "remix", "spokenword", "audiobook"]
