@@ -100,8 +100,6 @@ httplib.HTTPResponse.read = patch_http_response_read(httplib.HTTPResponse.read)
 
 def searchforalbum(albumid=None, new=False, lossless=False):
 
-    if headphones.USEGROOVESHARK:
-        print "using grooveshark for the greater good"
 
     if not albumid:
 
@@ -112,7 +110,11 @@ def searchforalbum(albumid=None, new=False, lossless=False):
 
         for result in results:
             foundNZB = "none"
-            if (headphones.NEWZNAB or headphones.NZBSORG or headphones.NZBX or headphones.NZBSRUS) and (headphones.SAB_HOST or headphones.BLACKHOLE):
+            if headphones.USEGROOVESHARK:
+                searchGrooveshark(album=result['AlbumID'])
+                print "using grooveshark for the greater good"
+
+            if (headphones.NEWZNAB or headphones.NZBSORG or headphones.NZBX or headphones.NZBSRUS) and (headphones.SAB_HOST or headphones.BLACKHOLE) and foundNZB == "none":
                 if result['Status'] == "Wanted Lossless":
                     foundNZB = searchNZB(result['AlbumID'], new, losslessOnly=True)
                 else:
@@ -565,7 +567,7 @@ def searchNZB(albumid=None, new=False, losslessOnly=False):
                         break
 
                 myDB.action('UPDATE albums SET status = "Snatched" WHERE AlbumID=?', [albums[2]])
-                myDB.action('INSERT INTO snatched VALUES( ?, ?, ?, ?, DATETIME("NOW", "localtime"), ?, ?, ?)', [albums[2], bestqual[0], bestqual[1], bestqual[2], "Snatched", nzb_folder_name, "nzb"])
+                myDB.action('INSERT INTO snatched VALUES( ?, ?, ?, ?, "", "", DATETIME("NOW", "localtime"), ?, ?, ?)', [albums[2], bestqual[0], bestqual[1], bestqual[2], "Snatched", nzb_folder_name, "nzb"])
                 return "found"
             else:
                 return "none"
