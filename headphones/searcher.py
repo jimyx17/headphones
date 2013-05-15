@@ -18,7 +18,7 @@ import lib.feedparser as feedparser
 from lib.pygazelle import api as gazelleapi
 from lib.pygazelle import encoding as gazelleencoding
 from lib.pygazelle import format as gazelleformat
-from lib.pygazelle import media as gazellemedia
+#from lib.pygazelle import media as gazellemedia
 from xml.dom import minidom
 from xml.parsers.expat import ExpatError
 import lib.simplejson as json
@@ -70,7 +70,7 @@ def getNewzbinURL(url):
     myOpener = classes.AuthURLOpener(headphones.NEWZBIN_UID, headphones.NEWZBIN_PASSWORD)
     try:
         f = myOpener.openit(url)
-    except (urllib.ContentTooShortError, IOError), e:
+    except (urllib.ContentTooShortError, IOError):
         logger.info("Error loading search results: ContentTooShortError ")
         return None
 
@@ -99,6 +99,9 @@ httplib.HTTPResponse.read = patch_http_response_read(httplib.HTTPResponse.read)
 
 
 def searchforalbum(albumid=None, new=False, lossless=False):
+
+    if headphones.USEGROOVESHARK:
+        print "using grooveshark for the greater good"
 
     if not albumid:
 
